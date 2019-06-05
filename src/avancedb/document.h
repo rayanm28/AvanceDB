@@ -31,33 +31,43 @@
 
 #include "types.h"
 #include "document_attachment.h"
+#include "KeyDomet.h"
+using namespace keydomet;
+
+//static int used_count=0;
+//static int not_used_count=0;
 
 class Document final : public boost::enable_shared_from_this<Document>, private boost::noncopyable {
 public:
     class Less {
     public:
         bool operator()(const document_ptr& a, const document_ptr& b) {
-            return std::strcmp(a->id_, b->id_) < 0;
+               return a->id_ < b->id_;
         }
     };
     
     class Equal {
     public:
         bool operator()(const document_ptr& a, const document_ptr& b) {
-            return std::strcmp(a->id_, b->id_) == 0;
+               return a->id_ == b->id_;
         }
     };
     
     class Compare {
     public:      
-        Compare(const char* id) : id_(id) {}
-        
-        int operator()(const document_ptr& doc) {
-            return std::strcmp(id_, doc->id_);
+        Compare(const char* id) :idK(std::move(string(id))) {
         }
-        
-    private:
-        const char* id_;
+        int operator()(const document_ptr& doc) {
+           int64_t diff=idK.prefix.prefix-doc->id_.prefix.prefix;
+           if (diff!=0) {
+                //used_count++;
+            return ((int*)&diff)[1]|1;
+            }
+                //not_used_count++;
+              return strcmp(idK.str.data() + 8, doc->id_.str.data() + 8);
+
+        }
+        KeyDomet idK;
     };
     
     static document_ptr Create(const char* id, script_object_ptr obj, sequence_type seqNum, bool incrementRev = true);
@@ -72,7 +82,8 @@ public:
 
     document_attachment_ptr getAttachment(const char* name, bool includeBody);
     std::vector<document_attachment_ptr> getAttachments();
-        
+
+
 private:
     
     friend document_ptr boost::make_shared<document_ptr::element_type>(script_object_ptr&, sequence_type&);
@@ -82,7 +93,7 @@ private:
     static bool ValidateHashField(const char*);
     
     script_object_ptr obj_;
-    const char* id_;
+    const KeyDomet id_;
     const char* rev_;
     const sequence_type seqNum_;
 };

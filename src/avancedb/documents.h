@@ -27,7 +27,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/atomic.hpp>
 #include <boost/thread.hpp>
-
+#include <chrono>
+#include <time.h>
 #include "types.h"
 #include "document.h"
 #include "document_collection.h"
@@ -37,13 +38,15 @@
 #include "json_stream.h"
 #include "get_view_options.h"
 #include "map_reduce.h"
-
+ using std::vector;
 class Database;
-
+//extern std::chrono::duration<double> elapsedTime;
+ extern vector<int> used_keyDomets;
+ extern vector<int> used_keyDomets_nfItems;
 class Documents final : public boost::enable_shared_from_this<Documents>, private boost::noncopyable {
 public:
     static documents_ptr Create(database_ptr db);
-    
+   
     document_ptr GetDocument(const char* id, bool throwOnFail = true);
     document_ptr DeleteDocument(const char* id, const char* rev);
     document_ptr SetDocument(const char* id, script_object_ptr obj);

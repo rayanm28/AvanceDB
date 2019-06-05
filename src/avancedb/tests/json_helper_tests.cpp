@@ -35,7 +35,7 @@ protected:
     
 };
 
-TEST_F(JsonHelperTests, test0) {
+/*TEST_F(JsonHelperTests, test0) {
     const char* json = "Hello world!";
     auto str = JsonHelper::EscapeJsonString(json);
     ASSERT_EQ(12, str.size());
@@ -330,4 +330,4 @@ TEST_F(JsonHelperTests, test21) {
     ASSERT_EQ(0, str.size());
     ASSERT_EQ(20, std::strlen(buffer.data()));
     ASSERT_STREQ(json, buffer.data());    
-}
+}*/

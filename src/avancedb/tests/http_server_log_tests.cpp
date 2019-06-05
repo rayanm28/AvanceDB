@@ -34,7 +34,7 @@ protected:
     
 };
 
-TEST_F(HttpServerLogTests, test0) {
+/*TEST_F(HttpServerLogTests, test0) {
     std::time_t time = 0;
     
     int year, month, day, hour, min, sec;    
@@ -216,4 +216,4 @@ TEST_F(HttpServerLogTests, test9) {
     ASSERT_EQ(17, hour);
     ASSERT_EQ(21, min);
     ASSERT_EQ(35, sec);
-}
+}*/

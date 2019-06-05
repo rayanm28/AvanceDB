@@ -129,7 +129,7 @@ database_ptr MapReduceTests::db_;
 script_array_ptr MapReduceTests::docs_;
 std::unique_ptr<MapReduceThreadPoolScope> MapReduceTests::threadPool_;
 
-TEST_F(MapReduceTests, test0) {
+/*TEST_F(MapReduceTests, test0) {
     ASSERT_EQ(0, db_->DocCount());
     ASSERT_EQ(0, db_->DocDelCount());
     ASSERT_EQ(0, db_->DiskSize());    
@@ -1011,4 +1011,4 @@ TEST_F(MapReduceTests, test37) {
     auto iter = results->cbegin();
     auto end = results->cend();       
     ASSERT_EQ(0, std::distance(iter, end));
-}
+}*/

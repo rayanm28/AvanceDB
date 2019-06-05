@@ -20,11 +20,13 @@
 
 #include <algorithm>
 #include <type_traits>
-
+#include <math.h>   
 #include <boost/bind.hpp>
 #include <boost/thread.hpp>
 #include <boost/make_shared.hpp>
-
+#include <cstring>
+#include <fstream>
+#include <iostream>
 #include "document.h"
 #include "document_collection.h"
 #include "document_collection_results.h"
@@ -40,6 +42,9 @@
 #include "script_object_vector_source.h"
 
 #include "md5.h"
+
+//static int used_count;
+//static int not_used_count;
 
 Documents::Documents(database_ptr db) : db_(db), docCount_(0),
         dataSize_(0), updateSeq_(0), localUpdateSeq_(0),
@@ -70,28 +75,48 @@ sequence_type Documents::getUpdateSequence() {
 }
 
 document_ptr Documents::GetDocument(const char* id, bool throwOnFail) {
-    auto coll = GetDocumentCollectionIndex(id);
-    
+
+    //static std::ofstream logFile1("results/log5F.csv");
+   // static std::ofstream logFile2("results/log5Times.csv");
+        
+     auto coll = GetDocumentCollectionIndex(id);
+
     boost::lock_guard<DocumentCollection> guard{*docs_[coll]};
-    
+
     Document::Compare compare{id};
-    auto doc = docs_[coll]->find_fn(compare);
     
+   //used_count=0;
+   //not_used_count=0;
+    
+   // std::chrono::steady_clock::time_point start = std::chrono::steady_clock::now();
+    auto doc = docs_[coll]->find_fn(compare);
+   // std::chrono::steady_clock::time_point finish = std::chrono::steady_clock::now();
+    //std::chrono::duration<long double> elapsedTime=std::chrono::duration_cast<std::chrono::nanoseconds>(finish - start);
+
+
+    /*if(doc){
+     // logFile2 << id << "\t" << elapsedTime.count() <<"\tF"<< std::endl;
+      logFile1 << compare.idK.getString() << "\t" << used_count << "\t" << not_used_count <<"\tF"<< std::endl;
+    }else{
+      //  logFile2 << id << "\t" << elapsedTime.count() <<"\tNF"<< std::endl;
+        logFile1 << compare.idK.getString() << "\t" << used_count << "\t" << not_used_count <<"\tNF"<< std::endl;
+    }
+
     if (!doc && throwOnFail) {
         throw DocumentMissing{};
-    }
+    }*/
     
     return doc;
 }
 
 document_ptr Documents::DeleteDocument(const char* id, const char* rev) {
     auto coll = GetDocumentCollectionIndex(id);
-    
+  //  std::cout << id << std::endl;
     boost::lock_guard<DocumentCollection> guard{*docs_[coll]};
     
     Document::Compare compare{id};
     auto doc = docs_[coll]->find_fn(compare);
-    
+    //std::cout << doc->getId() << std::endl;
     if (!doc) {
         throw DocumentMissing{};
     }
@@ -113,7 +138,7 @@ document_ptr Documents::DeleteDocument(const char* id, const char* rev) {
 }
 
 document_ptr Documents::SetDocument(const char* id, script_object_ptr obj) {
-    auto coll = GetDocumentCollectionIndex(id);
+        auto coll = GetDocumentCollectionIndex(id);
     
     boost::unique_lock<DocumentCollection> lock{*docs_[coll]};
     
@@ -135,7 +160,6 @@ document_ptr Documents::SetDocument(const char* id, script_object_ptr obj) {
     auto newDoc = Document::Create(id, obj, ++updateSeq_);
 
     docs_[coll]->insert(newDoc);
-    
     lock.unlock();
     
     if (!oldDoc) {
@@ -618,7 +642,9 @@ DocumentCollection::size_type Documents::FindDocument(const document_array& docs
             keyId++;
             keyIdLength -= 2;
         }
-        
+       /* const char* keyId = key.c_str();
+        Document::Compare compare{keyId};*/
+
         DocumentCollection::size_type min = 0;
         DocumentCollection::size_type mid = 0;
         DocumentCollection::size_type max = size - 1;
@@ -631,6 +657,7 @@ DocumentCollection::size_type Documents::FindDocument(const document_array& docs
             if (diff == 0 && docId[keyIdLength] != '\0') {
                 diff = -1;
             }
+          //  int diff =compare(docs[mid]);
 
             diff = descending ? -diff : diff;
             if (diff == 0) {
@@ -656,7 +683,9 @@ unsigned Documents::GetCollectionCount() const {
 }
 
 unsigned Documents::GetDocumentCollectionIndex(const char* id) const {
-    auto hash = Document::getIdHash(id);
-    auto index = hash % collections_;   
-    return index;
+
+  /* auto hash = Document::getIdHash(id);
+    auto index = hash % collections_;
+    return index;*/
+    return 0;
 }

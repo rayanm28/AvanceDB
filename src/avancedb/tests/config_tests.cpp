@@ -35,7 +35,7 @@ protected:
     
 };
 
-TEST_F(ConfigTests, test0) {
+/*TEST_F(ConfigTests, test0) {
     const char* args[] = { nullptr };
     
     Config::Parse(sizeof(args) / sizeof(args[0]), args);
@@ -247,4 +247,4 @@ TEST_F(ConfigTests, test23) {
     ASSERT_EQ(4.0, Config::MapReduce::WorkersPerCpu());
     ASSERT_EQ(8, Config::Environment::CpuCount());
     ASSERT_EQ(std::lround(4.0 * Config::Environment::CpuCount()), Config::MapReduce::Workers());
-}
+}*/

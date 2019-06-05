@@ -26,8 +26,11 @@
 #include "document_revision.h"
 #include "city.h"
 #include "base64_helper.h"
+using namespace keydomet;
+//KeyDomet(std::move(obj->getString("_id")))
+Document::Document(script_object_ptr obj, sequence_type seqNum) : obj_(obj),id_(KeyDomet(obj->getString("_id"))),rev_(obj->getString("_rev")), seqNum_(seqNum) {
 
-Document::Document(script_object_ptr obj, sequence_type seqNum) : obj_(obj), id_(obj->getString("_id")), rev_(obj->getString("_rev")), seqNum_(seqNum) {
+//const_cast<KeyDomet&>(id_) = KeyDomet(std::string(obj->getString("_id"))); KeyDomet(obj->getString("_id"))
 }
 
 document_ptr Document::Create(const char* id, script_object_ptr obj, sequence_type seqNum, bool incrementRev) {
@@ -72,11 +75,11 @@ document_ptr Document::Create(const char* id, script_object_ptr obj, sequence_ty
 }
 
 const char* Document::getId() const {
-    return id_;
+    return id_.getString().c_str();
 }
 
 std::uint64_t Document::getIdHash() const {
-    return getIdHash(id_);
+    return getIdHash(id_.getString().c_str());
 }
 
 std::uint64_t Document::getIdHash(const char* id) {    

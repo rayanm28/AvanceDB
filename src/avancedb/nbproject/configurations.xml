@@ -47,6 +47,7 @@
       <itemPath>script_object_response_stream.h</itemPath>
       <itemPath>set_thread_name.h</itemPath>
       <itemPath>types.h</itemPath>
+      <itemPath>KeyDomet.h</itemPath>
       <itemPath>uuid_helper.h</itemPath>
     </logicalFolder>
     <logicalFolder name="ResourceFiles"
@@ -285,6 +286,8 @@
       <item path="document.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="document.h" ex="false" tool="3" flavor2="0">
+      </item>
+        <item path="KeyDomet.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="document_attachment.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -673,6 +676,8 @@
       <item path="document.cpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="document.h" ex="false" tool="3" flavor2="0">
+      </item>
+        <item path="KeyDomet.h" ex="false" tool="3" flavor2="0">
       </item>
       <item path="document_attachment.cpp" ex="false" tool="1" flavor2="0">
       </item>
